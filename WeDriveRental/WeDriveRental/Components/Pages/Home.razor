@@ -1,0 +1,40 @@
+﻿@page "/"
+@using Shared.Models;
+@using WeDriveRental.Data
+@using WeDriveRental.Repositories
+<PageTitle>Home</PageTitle>
+@inject Repository repository
+
+<h1>Välkommen till Calle-Rentals!</h1>
+
+@if (rentals != null)
+{
+    <div class="row row-cols-4">
+        @foreach (RentalModel rentalModel in rentals)
+        {
+            <div class="col-lg-4 col-md-3 col-sm-4">
+                <div class="card">
+                    <img src="@rentalModel.ImageUrl" alt="Placeholder Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@rentalModel.Brand</h5>
+                        <p class="card-text">@rentalModel.Model</p>
+                        <p class="card-text">Color: @rentalModel.Color</p>
+                        <p class="card-footer">USD: @rentalModel.Price $</p>
+                        <p class="card-footer">Year: @rentalModel.Year</p>
+                        <a class="btn btn-primary">Go to Rental Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code
+{
+    private List<RentalModel>? rentals;
+
+    protected override async Task OnInitializedAsync()
+    {
+        rentals = await repository.GetAllRentalsAsync();
+    }
+}
